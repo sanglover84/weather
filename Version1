@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<!--Get your own code at fontawesome.com-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+</head>
+<body>
+
+<?php
+$user_ip = getenv('REMOTE_ADDR');
+$geo = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$user_ip"));
+$country = $geo["geoplugin_countryName"];
+$city = $geo["geoplugin_city"];
+
+
+$apikey = '0287a375fb8149b4aab204435200704';
+
+
+
+$VARIABLE1 = fopen("http://api.weatherapi.com/v1/current.json?key=$apikey&q=$user_ip", "r");
+$VARIABLE2 = stream_get_contents($VARIABLE1);
+fclose($VARIABLE1);
+$arr= json_decode($VARIABLE2);
+//print "<i>";
+//print $VARIABLE2;
+//print "</i>";
+$code = $arr->current->condition->code;
+//echo $code;
+
+print "<div class='w3-row'>";
+ print "<div class='w3-container w3-twothird w3-padding-large'>";
+ 
+ print "<div class='w3-card-2'>";
+
+print "<header class='w3-container w3-light-blue'>";
+
+print "<div id='weather'>";
+print "<H1>";
+echo $arr->location->name;
+print " ";
+echo $arr->location->region;
+echo " ";
+echo $arr->location->country;
+print "</h1>";
+print "</header>";
+
+print "<div class='w3-container w3-padding-large'>";
+print "<div id='icons' align='center'>";
+if ($code == 1000) {
+print "<i class='fas fa-sun' style='font-size:136px'></i>";
+    } elseif ($code == 1003 || $code == 1006 || $code == 1009){
+        print "<i class='fas fa-cloud-sun' style='font-size:136px'></i>";
+    } elseif ($code == 1030 || $code == 1135 || $code == 1147) {
+        print "<i class='fas fa-smog' style='font-size:136px'></i>";
+    } elseif ($code == 1063 || $code == 1150 || $code == 1153) {
+        print "<i class='fas fa-cloud-rain' style='font-size:136px'></i>";
+    } elseif ($code == 1066 || $code == 1114 || $code == 1117) {
+        print "<i class='fas fa-snowflake' style='font-size:136px'></i>";
+    } elseif ($code == 1069 || $code == 1072 || $code == 1168 || $code == 1171 || $code == 1249 || $code == 1252 || $code == 1261 || $code == 1264) {
+        print "<i class='fas fa-icicles' style='font-size:136px'></i>";
+        } elseif ($code == 1087 || $code == 1237) {
+        print "<i class='fas fa-bolt' style='font-size:136px'></i>";
+    } elseif ($code == 1180 || $code == 1183 || $code == 1240) {
+        print "<i class='fas fa-cloud-sun-rain' style='font-size:136px'></i>";
+    } elseif ($code == 1186 || $code == 1189 || $code == 1192 || $code == 1195 || $code == 1243 || $code == 1246) {
+        print "<i class='fas fa-cloud-showers-heavy' style='font-size:136px'></i>";
+    } elseif ($code == 1198 || $code == 1201 || $code == 1204 || $code == 1207 || $code == 1210 || $code == 1213 || $code == 1216 || code == 1219 || $code == 1222 || $code == 1225 || $code == 1255 || $code == 1258) {
+        print "<i class='far fa-snowflake' style='font-size:136px'></i>";
+    } elseif ($code == 1273 || $code == 1276 || $code == 1279 || $code == 1282) {
+        print "<i class='fas fa-poo-storm' style='font-size:136px'></i>";
+    }
+    else {
+        print "No weather";
+    }
+
+print "</div>"; // slash icons
+
+
+print "<h2>";
+echo $arr->current->condition->text;
+
+
+print "<h1>";
+echo $arr->current->temp_c;
+echo "&deg;C";
+print " | ";
+echo $arr->current->temp_f;
+echo "&deg;F";
+print "</h1>";
+echo "Feels like ";
+echo $arr->current->feelslike_c;
+echo "&deg;C";
+print " | ";
+echo $arr->current->feelslike_f;
+echo "&deg;F";
+print "<h3>";
+echo $arr->current->humidity;
+print "% humidity | ";
+echo $arr->current->cloud;
+print "% cloud cover";
+print "</h3><h3>";
+echo $arr->current->wind_kph;
+print " kph ";
+echo $arr->current->wind_dir;
+print " | ";
+echo $arr->current->gust_kph;
+echo " kph gusts";
+print "</h3>";
+print " <h4> ";
+echo $arr->current->precip_mm;
+print "mm of precipitation</h4>";
+print "<h4>";
+echo $arr->current->pressure_mb;
+print " pressure in millibars </h4>";
+print "<h5>";
+
+
+
+print "<footer class='w3-container w3-blue'>";
+print "<h5>Last updated ";
+echo $arr->current->last_updated;
+print "</h5>";
+print "</footer>";
+ print "</div>";
+ print "</div>"; //slash container
+ print "</div>"; //w3-card-4
+ 
+ 
+ // part 2 
+ $VARIABLE12 = fopen("http://api.weatherapi.com/v1/forecast.json?key=$apikey&q=$user_ip&days=6", "r");
+$VARIABLE22 = stream_get_contents($VARIABLE12);
+fclose($VARIABLE12);
+$arr2= json_decode($VARIABLE22);
+//print "<i>";
+//print $VARIABLE22;
+ print "<div class='w3-container w3-third w3-padding-large'>";
+ 
+  print "<div class='w3-card-2'>";
+
+print "<header class='w3-container w3-red'><h2>";
+echo $arr2->forecast->forecastday[0]->date;
+
+print "</h2></header>";
+print "<div class='w3-container w3-padding-large'>";
+echo $arr2->forecast->forecastday[0]->day->condition->text;
+print "<br>High  ";
+echo $arr2->forecast->forecastday[0]->day->maxtemp_c;
+echo "&deg;C";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[0]->day->mintemp_c;
+echo "&deg;C";
+print "<br>High ";
+echo $arr2->forecast->forecastday[0]->day->maxtemp_f;
+echo "&deg;F";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[0]->day->mintemp_f;
+echo "&deg;F";
+print "<br>";
+echo $arr2->forecast->forecastday[0]->day->totalprecip_mm;
+echo " mm precipitation | ";
+echo $arr2->forecast->forecastday[0]->day->avgvis_km;
+echo " km visibility";
+
+print "</div>";
+
+print "</div>"; //w3 card 2
+ 
+  
+  print "</div>";
+  
+  print "<div class='w3-container w3-third w3-padding-large'>";
+ 
+  print "<div class='w3-card-2'>";
+
+print "<header class='w3-container w3-orange'><h2>";
+echo $arr2->forecast->forecastday[1]->date;
+
+print "</h2></header>";
+print "<div class='w3-container w3-padding-large'>";
+echo $arr2->forecast->forecastday[1]->day->condition->text;
+print "<br>High  ";
+echo $arr2->forecast->forecastday[1]->day->maxtemp_c;
+echo "&deg;C";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[1]->day->mintemp_c;
+echo "&deg;C";
+print "<br>High ";
+echo $arr2->forecast->forecastday[1]->day->maxtemp_f;
+echo "&deg;F";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[1]->day->mintemp_f;
+echo "&deg;F";
+print "<br>";
+echo $arr2->forecast->forecastday[1]->day->totalprecip_mm;
+echo " mm precipitation | ";
+echo $arr2->forecast->forecastday[1]->day->avgvis_km;
+echo " km visibility";
+print "</div>";
+
+print "</div>"; //w3 card 2
+ 
+  
+ print "</div>";
+
+ print "<div class='w3-container w3-third w3-padding-large'>";
+ 
+  print "<div class='w3-card-2'>";
+
+print "<header class='w3-container w3-yellow'><h2>";
+echo $arr2->forecast->forecastday[2]->date;
+
+print "</h2></header>";
+print "<div class='w3-container w3-padding-large'>";
+echo $arr2->forecast->forecastday[2]->day->condition->text;
+print "<br>High  ";
+echo $arr2->forecast->forecastday[2]->day->maxtemp_c;
+echo "&deg;C";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[2]->day->mintemp_c;
+echo "&deg;C";
+print "<br>High ";
+echo $arr2->forecast->forecastday[2]->day->maxtemp_f;
+echo "&deg;F";
+print " | ";
+print "Low ";
+echo $arr2->forecast->forecastday[2]->day->mintemp_f;
+echo "&deg;F";
+print "<br>";
+echo $arr2->forecast->forecastday[2]->day->totalprecip_mm;
+echo " mm precipitation | ";
+echo $arr2->forecast->forecastday[2]->day->avgvis_km;
+echo " km visibility";
+print "</div>";
+
+print "</div>"; //w3 card 2
+ 
+  
+//  print "</div>";
+  
+   print "</div>";
+  
+ 
+
+print "</div>"; //w3 card 2
+print "</div>";
+?>
+
